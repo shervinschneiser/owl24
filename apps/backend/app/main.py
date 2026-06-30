@@ -1,11 +1,15 @@
 from fastapi import FastAPI
 
+from app.core.config import settings
+
 app = FastAPI(
-    title="owl24",
+    title=settings.APP_NAME,
     version="0.1.0",
 )
 
 
 @app.get("/")
 async def root() -> dict[str, str]:
-    return {"message": "Owl24 API"}
+    return {
+        "message": "OWL24 API",
+    }
