@@ -44,5 +44,29 @@ services:
       - "6379:6379"
     restart: unless-stopped
 
+    worker:
+    build:
+      context: ./apps/backend
+    command: celery -A app.core.celery_app.celery_app worker --loglevel=info
+    env_file:
+      - ./apps/backend/.env
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./apps/backend:/app
+
+  beat:
+    build:
+      context: ./apps/backend
+    command: celery -A app.core.celery_app.celery_app beat --loglevel=info
+    env_file:
+      - ./apps/backend/.env
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./apps/backend:/app
+
 volumes:
   postgres_data:
